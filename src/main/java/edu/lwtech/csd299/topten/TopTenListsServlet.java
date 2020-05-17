@@ -123,11 +123,58 @@ public class TopTenListsServlet extends HttpServlet {
     private void addDemoData() {
         logger.debug("Creating sample DemoPojos...");
         
-        dao.insert(new DemoPojo("Item I"));
-        dao.insert(new DemoPojo("Item II"));
-        dao.insert(new DemoPojo("Item III"));
+        String description;
+        List<String> items;
+        int owner;
+    
+        owner = 1;
+
+        description = "Top 10 Favorite Roman Numerals";
+        items = Arrays.asList(
+            "X",
+            "IX",
+            "VIII",
+            "VII",
+            "VI",
+            "V",
+            "IV",
+            "III",
+            "II",
+            "I"
+        );
+        dao.insert(new TopTenList(description, items, owner));
+
+        description = "Top 10 Favorite Planets";
+        items = Arrays.asList(
+            "Hollywood",
+            "Neptune",
+            "Uranus",
+            "Venus",
+            "Mercury",
+            "Earth",
+            "Mars",
+            "Jupiter",
+            "Saturn",
+            "Pluto!!!"
+        );
+        dao.insert(new TopTenList(description, items, owner));
         
-        logger.info("...items inserted");
+        description = "Top 10 Favorite Star Wars Movies";
+        items = Arrays.asList(
+            "III: Revenge of the Sith",
+            "II: Attack of the Clones",
+            "VIII: The Last Jedi",
+            "IX: The Rise of Skywalker",
+            "VI: Return of the Jedi",
+            "I: The Phantom Menace",
+            "VII: The Force Awakens",
+            "The Mandelorian Compilation",
+            "IV: A New Hope",
+            "V: The Empire Strikes Back"
+        );
+        dao.insert(new TopTenList(description, items, owner));
+        
+        logger.info(dao.size() + " lists inserted");
     }
 
 }
