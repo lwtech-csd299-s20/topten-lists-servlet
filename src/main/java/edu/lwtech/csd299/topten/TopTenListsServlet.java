@@ -19,7 +19,7 @@ public class TopTenListsServlet extends HttpServlet {
     private static final String TEMPLATE_DIR = "/WEB-INF/classes/templates";
     private static final Configuration freemarker = new Configuration(Configuration.getVersion());
 
-    private static DAO<DemoPojo> dao = null;
+    private static DAO<TopTenList> dao = null;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -40,7 +40,7 @@ public class TopTenListsServlet extends HttpServlet {
         }
         logger.info("Successfully Loaded Freemarker");
         
-        dao = new DemoPojoMemoryDAO();
+        dao = new TopTenListMemoryDAO();
         addDemoData();
 
         logger.warn("Initialize complete!");
