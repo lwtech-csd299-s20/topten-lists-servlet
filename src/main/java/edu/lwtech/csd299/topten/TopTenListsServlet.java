@@ -69,7 +69,8 @@ public class TopTenListsServlet extends HttpServlet {
                 if (prevIndex < 0) prevIndex = numItems-1;
 
                 template = "show.tpl";
-                model.put("item", dao.getByIndex(index));
+                model.put("topTenList", dao.getByIndex(index));
+                model.put("listNumber", index+1);                   // Java uses 0-based indexes.  Users want to see 1-based indexes.
                 model.put("prevIndex", prevIndex);
                 model.put("nextIndex", nextIndex);
                 break;
@@ -122,7 +123,7 @@ public class TopTenListsServlet extends HttpServlet {
 
     private void addDemoData() {
         logger.debug("Creating sample DemoPojos...");
-        
+
         String description;
         List<String> items;
         int owner;
