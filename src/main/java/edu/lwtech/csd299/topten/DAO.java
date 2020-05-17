@@ -10,5 +10,6 @@ public interface DAO<Pojo> {
     public Pojo getByIndex(int index);
     public List<Pojo> getAll();
     public List<Integer> getAllIDs();
+    public int size();
     public void disconnect();
 }
