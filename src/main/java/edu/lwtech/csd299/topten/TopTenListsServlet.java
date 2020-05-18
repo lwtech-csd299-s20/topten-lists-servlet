@@ -186,7 +186,8 @@ public class TopTenListsServlet extends HttpServlet {
         List<String> items = new ArrayList<>();
         for (int i=10; i >= 1; i--) {
             String item = request.getParameter("item" + i);
-            if (item == null) return null;
+            if (item == null || item == "")
+                return null;
             items.add(item);
         }
         
