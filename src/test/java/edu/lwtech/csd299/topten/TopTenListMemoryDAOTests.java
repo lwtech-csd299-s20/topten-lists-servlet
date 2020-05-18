@@ -76,8 +76,9 @@ public class TopTenListMemoryDAOTests {
     @Test
     public void insertTest() {
         assertEquals(3, memoryDAO.size());
-        memoryDAO.insert(romanList);        // Add a second copy of the roman list
+        int listID = memoryDAO.insert(romanList);        // Add a second copy of the roman list
         assertEquals(4, memoryDAO.size());
+        assertTrue(listID > 0);
     }
     
     @Test
