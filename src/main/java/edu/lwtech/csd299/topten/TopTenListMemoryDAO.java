@@ -29,10 +29,11 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
             return -1;
         }
         
-        memoryDB.add(new TopTenList(generateNextID(), list));       // Replace -1 ID with official ID
+        TopTenList newList = new TopTenList(generateNextID(), list);       // Replace -1 ID with official ID
+        memoryDB.add(newList);
         
         logger.debug("Item successfully inserted!");
-        return list.getID();
+        return newList.getID();
     }
     
     public void delete(int id) {
