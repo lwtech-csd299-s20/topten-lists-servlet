@@ -190,7 +190,7 @@ public class TopTenListsServlet extends HttpServlet {
             items.add(item);
         }
         
-        TopTenList newList = new TopTenList(title, items, owner);
+        TopTenList newList = new TopTenList(description, items, owner);
         return newList;
     }
 
