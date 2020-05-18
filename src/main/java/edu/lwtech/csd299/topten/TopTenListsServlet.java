@@ -180,8 +180,8 @@ public class TopTenListsServlet extends HttpServlet {
 
     private TopTenList getTopTenListFromRequest(HttpServletRequest request, int owner) {
 
-        String title = request.getParameter("title");
-        if (title == null) return null;
+        String description = request.getParameter("description");
+        if (description == null) return null;
 
         List<String> items = new ArrayList<>();
         for (int i=10; i >= 1; i--) {

@@ -11,7 +11,7 @@
 
         <form action="?cmd=create" method="post">
 
-            Title: <input type="text" name="title" size=60></input><br />
+            Description: <input type="text" name="description" size=60></input><br />
             <br />
             Item 10: <input type="text" name="item10" size=40></input><br />
             Item 9: <input type="text" name="item9" size=40></input><br />
