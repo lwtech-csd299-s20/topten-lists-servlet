@@ -7,7 +7,7 @@ public class TopTenList {
     // Encapsulated member variables
     private int id;                 // Database ID (or -1 if it isn't in the database yet)
     private String description;
-    private List<String> items;
+    private List<String> items;     // Note: First item in list is #10.  Last item is #1
     private int ownerID;
     private boolean published;
     private long numViews;
