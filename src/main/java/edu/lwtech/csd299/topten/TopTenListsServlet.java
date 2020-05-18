@@ -54,8 +54,12 @@ public class TopTenListsServlet extends HttpServlet {
         String command = request.getParameter("cmd");
         if (command == null) command = "show";
 
+        //TODO: Get owner from session
+        int owner = 1;
+
         String template = "";
         Map<String, Object> model = new HashMap<>();
+        model.put("owner", owner);
 
         //TODO: Add more URL commands to the servlet
         switch (command) {
