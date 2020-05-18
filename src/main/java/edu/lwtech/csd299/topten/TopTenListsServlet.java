@@ -64,6 +64,10 @@ public class TopTenListsServlet extends HttpServlet {
         //TODO: Add more URL commands to the servlet
         switch (command) {
 
+            case "add":
+                template = "add.tpl";
+                break;
+
             case "show":
                 String indexParam = request.getParameter("index");
                 int index = (indexParam == null) ? 0 : Integer.parseInt(indexParam);
@@ -96,7 +100,56 @@ public class TopTenListsServlet extends HttpServlet {
         logger.info("OUT- GET " + request.getRequestURI() + " " + time + "ms");
     }
 
-    //TODO: doPost() goes here - if needed.
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        logger.debug("IN -POST " + request.getRequestURI());
+        long startTime = System.currentTimeMillis();
+        
+        String command = request.getParameter("cmd");
+        if (command == null) command = "";
+
+        //TODO: Get owner from session
+        int owner = 1;
+
+        String message = "";
+        String template = "confirm.tpl";
+        Map<String, Object> model = new HashMap<>();
+        
+        switch (command) {
+
+            case "create":
+                TopTenList newList = getTopTenListFromRequest(request, owner);
+
+                if (newList == null) {
+                    logger.info("Create request ignored because one or more fields were empty.");
+                    message = "Your new TopTenList was not created because one or more fields were empty.";
+                } else {
+                    if (dao.insert(newList) > 0)
+                        message = "Your new TopTen List has been created successfully.";
+                    else
+                        message = "There was a problem adding your list to the database.";
+                }
+                break;
+                
+            default:
+                logger.info("Unknown POST command received: " + command);
+
+                // Send 404 error response
+                try {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                } catch (IOException e)  {
+                    logger.error("IO Error: ", e);
+                }
+                return;
+        }
+
+        model.put("message", message);
+       
+        processTemplate(response, template, model);
+
+        long time = System.currentTimeMillis() - startTime;
+        logger.info("OUT- GET " + request.getRequestURI() + " " + time + "ms");
+    }
     
     @Override
     public void destroy() {
@@ -123,7 +176,25 @@ public class TopTenListsServlet extends HttpServlet {
         } catch (IOException e) {
             logger.error("IO Error: ", e);
         } 
-    }    
+    }
+
+    private TopTenList getTopTenListFromRequest(HttpServletRequest request, int owner) {
+
+        String title = request.getParameter("title");
+        if (title == null) return null;
+
+        List<String> items = new ArrayList<>();
+        for (int i=10; i >= 1; i--) {
+            String item = request.getParameter("item" + i);
+            if (item == null) return null;
+            items.add(item);
+        }
+        
+        TopTenList newList = new TopTenList(title, items, owner);
+        return newList;
+    }
+
+    // ======================================================================
 
     private void addDemoData() {
         logger.debug("Creating sample DemoPojos...");

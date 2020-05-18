@@ -17,5 +17,7 @@
 
         <a href="?cmd=show&index=${prevIndex}">Previous</a> &nbsp; &nbsp;
         <a href="?cmd=show&index=${nextIndex}">Next</a><br/>
+        <br />
+        <a href="?cmd=add">Add a New List</a>
     </body>
 </html>
