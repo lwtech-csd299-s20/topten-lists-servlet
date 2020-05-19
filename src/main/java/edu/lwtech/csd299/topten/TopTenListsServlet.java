@@ -22,6 +22,10 @@ public class TopTenListsServlet extends HttpServlet {
     private static DAO<Member> membersDao = null;
     private static DAO<TopTenList> listsDao = null;
 
+    //TODO: Replace these with session variables
+    private static int owner = 0;
+    private static boolean loggedIn = false;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         logger.warn("=========================================");
@@ -57,12 +61,13 @@ public class TopTenListsServlet extends HttpServlet {
         String command = request.getParameter("cmd");
         if (command == null) command = "home";
 
+        //TODO: Get the loggedIn state from the session
 
         //TODO: Get owner from session
-        int owner = 1;
 
         String template = "";
         Map<String, Object> model = new HashMap<>();
+        model.put("loggedIn", loggedIn);
         model.put("owner", owner);
 
         //TODO: Add more URL commands to the servlet
@@ -74,6 +79,19 @@ public class TopTenListsServlet extends HttpServlet {
 
             case "home":
                 template = "home.tpl";
+                break;
+
+            case "login":
+                template = "login.tpl";
+                break;
+
+            case "logout":
+                //TODO: Delete the session for this user
+                owner = 0;
+                loggedIn = false;
+
+                template = "confirm.tpl";
+                model.put("message", "You have been successfully logged out.<br /><a href='?cmd=home'>Home</a>");
                 break;
 
             case "show":
@@ -116,9 +134,6 @@ public class TopTenListsServlet extends HttpServlet {
         String command = request.getParameter("cmd");
         if (command == null) command = "";
 
-        //TODO: Get owner from session
-        int owner = 1;
-
         String message = "";
         String template = "confirm.tpl";
         Map<String, Object> model = new HashMap<>();
@@ -138,7 +153,26 @@ public class TopTenListsServlet extends HttpServlet {
                         message = "There was a problem adding your list to the database.";
                 }
                 break;
+
+            case "login":
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
                 
+                Member member = membersDao.search(username);
+
+                if (member.getPassword().equals(password)) {
+                    owner = member.getID();
+                    loggedIn = true;
+                    message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
+                } else {
+                    message = "Your password did not match what we have on file.  Please try again.";
+                }
+
+                model.put("loggedIn", loggedIn);
+                model.put("message", message);
+                break;
+                
+
             default:
                 logger.info("Unknown POST command received: " + command);
 

@@ -18,6 +18,12 @@
         <a href="?cmd=show&index=${prevIndex}">Previous</a> &nbsp; &nbsp;
         <a href="?cmd=show&index=${nextIndex}">Next</a><br/>
         <br />
-        <a href="?cmd=add">Add a New List</a>
+
+        <#if loggedIn>
+            <a href="?cmd=add">Add a New List</a><br />
+            <a href="?cmd=logout">Log Out</a>
+        <#else>
+            <a href="?cmd=login">Log In</a>
+        </#if>
     </body>
 </html>
