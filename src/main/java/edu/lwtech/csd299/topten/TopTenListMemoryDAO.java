@@ -83,6 +83,20 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
         return listIDs;
     }
 
+    public TopTenList search(String keyword) {
+        logger.debug("Trying to get list with description containing: " + keyword);
+        
+        keyword = keyword.toLowerCase();
+        TopTenList memberFound = null;
+        for (TopTenList member : memoryDB) {
+            if (member.getDescription().toLowerCase().contains(keyword)) {
+                memberFound = member;
+                break;
+            }
+        }
+        return memberFound;
+    }
+
     public int size() {
         return memoryDB.size();
     }
