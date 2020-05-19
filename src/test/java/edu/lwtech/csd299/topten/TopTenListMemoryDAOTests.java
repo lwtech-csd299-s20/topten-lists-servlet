@@ -6,11 +6,11 @@ import static org.junit.Assert.*;
 
 public class TopTenListMemoryDAOTests {
 
-    DAO<TopTenList> memoryDAO;
+    private DAO<TopTenList> memoryDAO;
 
-    TopTenList romanList;
-    TopTenList planetsList;
-    TopTenList starWarsList;
+    private TopTenList romanList;
+    private TopTenList planetsList;
+    private TopTenList starWarsList;
 
     public TopTenListMemoryDAOTests() {
 
@@ -102,6 +102,6 @@ public class TopTenListMemoryDAOTests {
         List<TopTenList> allLists = new ArrayList<>();
         allLists = memoryDAO.getAll();
         assertEquals(3, allLists.size());
-    }    
+    }
     
 }
