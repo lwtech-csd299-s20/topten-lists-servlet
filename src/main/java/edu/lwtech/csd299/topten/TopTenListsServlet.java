@@ -19,7 +19,7 @@ public class TopTenListsServlet extends HttpServlet {
     private static final String TEMPLATE_DIR = "/WEB-INF/classes/templates";
     private static final Configuration freemarker = new Configuration(Configuration.getVersion());
 
-    private static DAO<TopTenList> dao = null;
+    private static DAO<TopTenList> listsDao = null;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -40,8 +40,8 @@ public class TopTenListsServlet extends HttpServlet {
         }
         logger.info("Successfully Loaded Freemarker");
         
-        dao = new TopTenListMemoryDAO();
-        addDemoData();
+        listsDao = new TopTenListMemoryDAO();
+        addDemoTopTenListData();
 
         logger.warn("Initialize complete!");
     }
@@ -71,13 +71,13 @@ public class TopTenListsServlet extends HttpServlet {
             case "show":
                 String indexParam = request.getParameter("index");
                 int index = (indexParam == null) ? 0 : Integer.parseInt(indexParam);
-                int numItems = dao.getAllIDs().size();
+                int numItems = listsDao.getAllIDs().size();
                 int nextIndex = (index + 1) % numItems;
                 int prevIndex = index - 1;
                 if (prevIndex < 0) prevIndex = numItems-1;
 
                 template = "show.tpl";
-                model.put("topTenList", dao.getByIndex(index));
+                model.put("topTenList", listsDao.getByIndex(index));
                 model.put("listNumber", index+1);                   // Java uses 0-based indexes.  Users want to see 1-based indexes.
                 model.put("prevIndex", prevIndex);
                 model.put("nextIndex", nextIndex);
@@ -124,7 +124,7 @@ public class TopTenListsServlet extends HttpServlet {
                     logger.info("Create request ignored because one or more fields were empty.");
                     message = "Your new TopTenList was not created because one or more fields were empty.";
                 } else {
-                    if (dao.insert(newList) > 0)
+                    if (listsDao.insert(newList) > 0)
                         message = "Your new TopTen List has been created successfully.";
                     else
                         message = "There was a problem adding your list to the database.";
@@ -200,6 +200,9 @@ public class TopTenListsServlet extends HttpServlet {
     private void addDemoData() {
         logger.debug("Creating sample DemoPojos...");
 
+    private void addDemoTopTenListData() {
+        logger.debug("Creating demo TopTenLists...");
+
         String description;
         List<String> items;
         int owner;
@@ -219,7 +222,7 @@ public class TopTenListsServlet extends HttpServlet {
             "II",
             "I"
         );
-        dao.insert(new TopTenList(description, items, owner));
+        listsDao.insert(new TopTenList(description, items, owner));
 
         description = "Top 10 Favorite Planets";
         items = Arrays.asList(
@@ -234,7 +237,7 @@ public class TopTenListsServlet extends HttpServlet {
             "Saturn",
             "Pluto!!!"
         );
-        dao.insert(new TopTenList(description, items, owner));
+        listsDao.insert(new TopTenList(description, items, owner));
         
         description = "Top 10 Favorite Star Wars Movies";
         items = Arrays.asList(
@@ -249,9 +252,9 @@ public class TopTenListsServlet extends HttpServlet {
             "IV: A New Hope",
             "V: The Empire Strikes Back"
         );
-        dao.insert(new TopTenList(description, items, owner));
+        listsDao.insert(new TopTenList(description, items, owner));
         
-        logger.info(dao.size() + " lists inserted");
+        logger.info(listsDao.size() + " lists inserted");
     }
 
 }
