@@ -19,6 +19,7 @@ public class TopTenListsServlet extends HttpServlet {
     private static final String TEMPLATE_DIR = "/WEB-INF/classes/templates";
     private static final Configuration freemarker = new Configuration(Configuration.getVersion());
 
+    private static DAO<Member> membersDao = null;
     private static DAO<TopTenList> listsDao = null;
 
     @Override
@@ -40,6 +41,8 @@ public class TopTenListsServlet extends HttpServlet {
         }
         logger.info("Successfully Loaded Freemarker");
         
+        membersDao = new MemberMemoryDAO();
+        addDemoMemberData();
         listsDao = new TopTenListMemoryDAO();
         addDemoTopTenListData();
 
@@ -197,8 +200,19 @@ public class TopTenListsServlet extends HttpServlet {
 
     // ======================================================================
 
-    private void addDemoData() {
-        logger.debug("Creating sample DemoPojos...");
+    private void addDemoMemberData() {
+        logger.debug("Creating demo Members...");
+
+        Member member;
+        member = new Member("fred@lwtech.edu", "12345678");
+        membersDao.insert(member);
+        member = new Member("tom@lwtech.edu", "12345678");
+        membersDao.insert(member);
+        member = new Member("mary@lwtech.edu", "12345678");
+        membersDao.insert(member);
+
+        logger.info(membersDao.size() + " members inserted");
+    }
 
     private void addDemoTopTenListData() {
         logger.debug("Creating demo TopTenLists...");
