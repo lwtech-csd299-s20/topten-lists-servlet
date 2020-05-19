@@ -98,7 +98,7 @@ public class TopTenListMemoryDAOTests {
     }
     
     @Test
-    public void getAllDemoPojosTest() {
+    public void getAllTest() {
         List<TopTenList> allLists = new ArrayList<>();
         allLists = memoryDAO.getAll();
         assertEquals(3, allLists.size());

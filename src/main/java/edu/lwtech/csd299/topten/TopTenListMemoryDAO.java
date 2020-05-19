@@ -14,7 +14,6 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
     public TopTenListMemoryDAO() {
         this.nextID = 1000;
         this.memoryDB = new ArrayList<>();
-        // addSampleData();
     }
 
     public boolean init() {
@@ -75,13 +74,13 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
     }    
     
     public List<Integer> getAllIDs() {
-        logger.debug("Getting Item IDs...");
+        logger.debug("Getting list IDs...");
 
-        List<Integer> itemIDs = new ArrayList<>();
-        for (TopTenList item : memoryDB) {
-            itemIDs.add(item.getID());
+        List<Integer> listIDs = new ArrayList<>();
+        for (TopTenList list : memoryDB) {
+            listIDs.add(list.getID());
         }
-        return itemIDs;
+        return listIDs;
     }
 
     public int size() {
