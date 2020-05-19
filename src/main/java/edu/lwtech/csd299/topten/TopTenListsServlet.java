@@ -55,7 +55,8 @@ public class TopTenListsServlet extends HttpServlet {
         long startTime = System.currentTimeMillis();
 
         String command = request.getParameter("cmd");
-        if (command == null) command = "show";
+        if (command == null) command = "home";
+
 
         //TODO: Get owner from session
         int owner = 1;
@@ -69,6 +70,10 @@ public class TopTenListsServlet extends HttpServlet {
 
             case "add":
                 template = "add.tpl";
+                break;
+
+            case "home":
+                template = "home.tpl";
                 break;
 
             case "show":
