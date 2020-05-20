@@ -74,15 +74,15 @@ public class TopTenListsServlet extends HttpServlet {
         switch (command) {
 
             case "add":
-                template = "add.tpl";
+                template = "add.ftl";
                 break;
 
             case "home":
-                template = "home.tpl";
+                template = "home.ftl";
                 break;
 
             case "login":
-                template = "login.tpl";
+                template = "login.ftl";
                 break;
 
             case "logout":
@@ -90,7 +90,7 @@ public class TopTenListsServlet extends HttpServlet {
                 owner = 0;
                 loggedIn = false;
 
-                template = "confirm.tpl";
+                template = "confirm.ftl";
                 model.put("message", "You have been successfully logged out.<br /><a href='?cmd=home'>Home</a>");
                 break;
 
@@ -102,7 +102,7 @@ public class TopTenListsServlet extends HttpServlet {
                 int prevIndex = index - 1;
                 if (prevIndex < 0) prevIndex = numItems-1;
 
-                template = "show.tpl";
+                template = "show.ftl";
                 model.put("topTenList", listsDao.getByIndex(index));
                 model.put("listNumber", index+1);                   // Java uses 0-based indexes.  Users want to see 1-based indexes.
                 model.put("prevIndex", prevIndex);
@@ -135,7 +135,7 @@ public class TopTenListsServlet extends HttpServlet {
         if (command == null) command = "";
 
         String message = "";
-        String template = "confirm.tpl";
+        String template = "confirm.ftl";
         Map<String, Object> model = new HashMap<>();
         
         switch (command) {
