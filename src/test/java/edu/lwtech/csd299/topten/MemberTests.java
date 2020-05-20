@@ -1,6 +1,5 @@
 package edu.lwtech.csd299.topten;
 
-import java.util.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 

@@ -19,12 +19,12 @@ public class TopTenListsServlet extends HttpServlet {
     private static final String TEMPLATE_DIR = "/WEB-INF/classes/templates";
     private static final Configuration freemarker = new Configuration(Configuration.getVersion());
 
-    private static DAO<Member> membersDao = null;
-    private static DAO<TopTenList> listsDao = null;
+    private DAO<Member> membersDao = null;
+    private DAO<TopTenList> listsDao = null;
 
     //TODO: Replace these with session variables
-    private static int owner = 0;
-    private static boolean loggedIn = false;
+    private int owner = 0;
+    private boolean loggedIn = false;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -146,12 +146,13 @@ public class TopTenListsServlet extends HttpServlet {
                 if (newList == null) {
                     logger.info("Create request ignored because one or more fields were empty.");
                     message = "Your new TopTenList was not created because one or more fields were empty.";
-                } else {
-                    if (listsDao.insert(newList) > 0)
-                        message = "Your new TopTen List has been created successfully.";
-                    else
-                        message = "There was a problem adding your list to the database.";
+                    break;
                 }
+
+                if (listsDao.insert(newList) > 0)
+                    message = "Your new TopTen List has been created successfully.";
+                else
+                    message = "There was a problem adding your list to the database.";
                 break;
 
             case "login":
@@ -161,14 +162,17 @@ public class TopTenListsServlet extends HttpServlet {
                 Member member = membersDao.search(username);
                 if (member == null) {
                     message = "We do not have a member with that username on file.  Please try again.";
+                    model.put("loggedIn", loggedIn);
+                    model.put("message", message);
+                    break;
+                }
+
+                if (member.getPassword().equals(password)) {
+                    owner = member.getID();
+                    loggedIn = true;
+                    message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
                 } else {
-                    if (member.getPassword().equals(password)) {
-                        owner = member.getID();
-                        loggedIn = true;
-                        message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
-                    } else {
-                        message = "Your password did not match what we have on file.  Please try again.";
-                    }
+                    message = "Your password did not match what we have on file.  Please try again.";
                 }
 
                 model.put("loggedIn", loggedIn);
@@ -230,7 +234,7 @@ public class TopTenListsServlet extends HttpServlet {
         List<String> items = new ArrayList<>();
         for (int i=10; i >= 1; i--) {
             String item = request.getParameter("item" + i);
-            if (item == null || item == "")
+            if (item == null || item.equals(""))
                 return null;
             items.add(item);
         }
@@ -260,7 +264,6 @@ public class TopTenListsServlet extends HttpServlet {
 
         String description;
         List<String> items;
-        int owner;
     
         owner = 1;
 
