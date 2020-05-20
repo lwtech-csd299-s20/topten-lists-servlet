@@ -7,7 +7,6 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 import org.apache.log4j.*;
-import freemarker.core.*;
 import freemarker.template.*;
 
 @WebServlet(name = "TopTenListsServlet", urlPatterns = {"/lists"}, loadOnStartup = 0)
@@ -21,10 +20,6 @@ public class TopTenListsServlet extends HttpServlet {
 
     private DAO<Member> membersDao = null;
     private DAO<TopTenList> listsDao = null;
-
-    //TODO: Replace these with session variables
-    private int owner = 0;
-    private boolean loggedIn = false;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -61,12 +56,23 @@ public class TopTenListsServlet extends HttpServlet {
         String command = request.getParameter("cmd");
         if (command == null) command = "home";
 
-        //TODO: Get the loggedIn state from the session
+        int owner = 0;
+        boolean loggedIn = false;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            try {
+                owner = Integer.parseInt((String)session.getAttribute("owner"));
+                loggedIn = true;
+            } catch (NumberFormatException e) {
+                owner = 0;
+                loggedIn = false;
+            }
+        }
 
         String template = "";
         Map<String, Object> model = new HashMap<>();
-        model.put("loggedIn", loggedIn);
         model.put("owner", owner);
+        model.put("loggedIn", loggedIn);
 
         //TODO: Add more URL commands to the servlet
         switch (command) {
@@ -84,9 +90,9 @@ public class TopTenListsServlet extends HttpServlet {
                 break;
 
             case "logout":
-                //TODO: Delete the session for this user
-                owner = 0;
-                loggedIn = false;
+                if (session != null) {
+                    session.invalidate();
+                }
 
                 template = "confirm.ftl";
                 model.put("message", "You have been successfully logged out.<br /><a href='?cmd=home'>Home</a>");
@@ -94,7 +100,14 @@ public class TopTenListsServlet extends HttpServlet {
 
             case "show":
                 String indexParam = request.getParameter("index");
-                int index = (indexParam == null) ? 0 : Integer.parseInt(indexParam);
+
+                int index = 0;
+                try {
+                    index = (indexParam == null) ? 0 : Integer.parseInt(indexParam);
+                } catch (NumberFormatException e) {
+                    index = 0;
+                }
+
                 int numItems = listsDao.getAllIDs().size();
                 int nextIndex = (index + 1) % numItems;
                 int prevIndex = index - 1;
@@ -132,6 +145,19 @@ public class TopTenListsServlet extends HttpServlet {
         String command = request.getParameter("cmd");
         if (command == null) command = "";
 
+        int owner = 0;
+        boolean loggedIn = false;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            try {
+                owner = Integer.parseInt((String)session.getAttribute("owner"));
+                loggedIn = true;
+            } catch (NumberFormatException e) {
+                owner = 0;
+                loggedIn = false;
+            }
+        }
+
         String message = "";
         String template = "confirm.ftl";
         Map<String, Object> model = new HashMap<>();
@@ -168,6 +194,10 @@ public class TopTenListsServlet extends HttpServlet {
                 if (member.getPassword().equals(password)) {
                     owner = member.getID();
                     loggedIn = true;
+
+                    session = request.getSession(true);
+                    session.setAttribute("owner", owner);
+
                     message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
                 } else {
                     message = "Your password did not match what we have on file.  Please try again.";
@@ -217,7 +247,7 @@ public class TopTenListsServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Template view = freemarker.getTemplate(template);
             view.process(model, out);
-        } catch (TemplateException | MalformedTemplateNameException | ParseException e) {
+        } catch (TemplateException | MalformedTemplateNameException e) {
             logger.error("Template Error: ", e);
         } catch (IOException e) {
             logger.error("IO Error: ", e);
@@ -262,7 +292,7 @@ public class TopTenListsServlet extends HttpServlet {
         String description;
         List<String> items;
     
-        owner = 1;
+        int owner = 1;
 
         description = "Top 10 Favorite Roman Numerals";
         items = Arrays.asList(
