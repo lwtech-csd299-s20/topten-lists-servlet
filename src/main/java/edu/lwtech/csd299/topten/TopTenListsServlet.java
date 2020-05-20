@@ -159,19 +159,21 @@ public class TopTenListsServlet extends HttpServlet {
                 String password = request.getParameter("password");
                 
                 Member member = membersDao.search(username);
-
-                if (member.getPassword().equals(password)) {
-                    owner = member.getID();
-                    loggedIn = true;
-                    message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
+                if (member == null) {
+                    message = "We do not have a member with that username on file.  Please try again.";
                 } else {
-                    message = "Your password did not match what we have on file.  Please try again.";
+                    if (member.getPassword().equals(password)) {
+                        owner = member.getID();
+                        loggedIn = true;
+                        message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
+                    } else {
+                        message = "Your password did not match what we have on file.  Please try again.";
+                    }
                 }
 
                 model.put("loggedIn", loggedIn);
                 model.put("message", message);
                 break;
-                
 
             default:
                 logger.info("Unknown POST command received: " + command);
