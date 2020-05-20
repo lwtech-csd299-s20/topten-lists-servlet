@@ -239,8 +239,7 @@ public class TopTenListsServlet extends HttpServlet {
             items.add(item);
         }
         
-        TopTenList newList = new TopTenList(description, items, owner);
-        return newList;
+        return new TopTenList(description, items, owner);
     }
 
     // ======================================================================
