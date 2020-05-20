@@ -63,8 +63,6 @@ public class TopTenListsServlet extends HttpServlet {
 
         //TODO: Get the loggedIn state from the session
 
-        //TODO: Get owner from session
-
         String template = "";
         Map<String, Object> model = new HashMap<>();
         model.put("loggedIn", loggedIn);
