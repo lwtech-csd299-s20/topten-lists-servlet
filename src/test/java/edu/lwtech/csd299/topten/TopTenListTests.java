@@ -10,7 +10,8 @@ public class TopTenListTests {
     TopTenList planetsList;
     TopTenList starWarsList;
 
-    public TopTenListTests() {
+    @Before
+    public void setUp() {
         String description;
         List<String> items;
         int owner = 1;
@@ -59,10 +60,6 @@ public class TopTenListTests {
             "V: The Empire Strikes Back"
         );
         starWarsList = new TopTenList(description, items, owner);
-    }
-
-    @Before
-    public void setUp() {
     }
 
     @Test

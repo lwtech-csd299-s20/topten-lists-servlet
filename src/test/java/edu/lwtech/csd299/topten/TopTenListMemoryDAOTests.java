@@ -12,8 +12,8 @@ public class TopTenListMemoryDAOTests {
     private TopTenList planetsList;
     private TopTenList starWarsList;
 
-    public TopTenListMemoryDAOTests() {
-
+    @Before
+    public void setUp() {
         String description;
         List<String> items;
         int owner = 1;
@@ -67,10 +67,6 @@ public class TopTenListMemoryDAOTests {
         memoryDAO.insert(romanList);
         memoryDAO.insert(planetsList);
         memoryDAO.insert(starWarsList);
-    }
-
-    @Before
-    public void setUp() {
     }
 
     @Test

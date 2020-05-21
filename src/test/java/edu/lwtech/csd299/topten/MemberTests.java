@@ -9,14 +9,11 @@ public class MemberTests {
     Member tom;
     Member mary;
 
-    public MemberTests() {
+    @Before
+    public void setUp() {
         fred = new Member("fred@lwtech.edu", "12345678");
         tom = new Member("tom@lwtech.edu", "12345678");
         mary = new Member("mary@lwtech.edu", "12345678");
-    }
-
-    @Before
-    public void setUp() {
     }
 
     @Test

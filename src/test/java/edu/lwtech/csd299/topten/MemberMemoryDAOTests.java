@@ -12,7 +12,8 @@ public class MemberMemoryDAOTests {
     private Member tom;
     private Member mary;
 
-    public MemberMemoryDAOTests() {
+    @Before
+    public void setUp() {
         fred = new Member("fred@lwtech.edu", "12345678");
         tom = new Member("tom@lwtech.edu", "12345678");
         mary = new Member("mary@lwtech.edu", "12345678");
@@ -21,10 +22,6 @@ public class MemberMemoryDAOTests {
         memoryDAO.insert(fred);
         memoryDAO.insert(tom);
         memoryDAO.insert(mary);
-    }
-
-    @Before
-    public void setUp() {
     }
 
     @Test
