@@ -8,7 +8,6 @@
     <body>
         <p>
             ${message}<br>
-            <a href="?cmd=show">Back to the lists!</a>
         </p>
     </body>
 </html>

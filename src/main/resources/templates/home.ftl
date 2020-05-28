@@ -6,10 +6,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <h1>Top Top 10 Lists</h1>
-        <h2>The Best TopTen Lists on the Internet!</h2>
+        <h1>Top Top-10 Lists</h1>
+        <h2>The Best Top-10 Lists on the Internet!</h2>
 
-        <a href="?cmd=show">Show me the lists!</a> &nbsp; &nbsp;
+        <a href="?cmd=show">Show me the first list!</a><br />
+        <br />
+
+        <table border="1">
+            <tr>
+                <th>Likes</th><th>Description</th><th>Views</th>
+            </tr>
+            <#list topTenLists as topTenList>
+            <tr>
+                <td>${topTenList.numLikes}</td>
+                <td><a href="?cmd=show&index=${topTenList?index}">${topTenList.description}</a></td>
+                <td>${topTenList.numViews}</td>
+            </tr>
+            </#list>
+        </table><br />
+        <br />
 
         <#if loggedIn>
             <a href="?cmd=add">Add a New List</a><br />

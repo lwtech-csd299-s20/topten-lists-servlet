@@ -61,7 +61,7 @@ public class TopTenListsServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             try {
-                owner = Integer.parseInt((String)session.getAttribute("owner"));
+                owner = (Integer)session.getAttribute("owner");
                 loggedIn = true;
             } catch (NumberFormatException e) {
                 owner = 0;
@@ -82,6 +82,8 @@ public class TopTenListsServlet extends HttpServlet {
                 break;
 
             case "home":
+                List<TopTenList> topTenLists = listsDao.getAll();
+                model.put("topTenLists", topTenLists);
                 template = "home.ftl";
                 break;
 
