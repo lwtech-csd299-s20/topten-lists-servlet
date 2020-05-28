@@ -10,13 +10,13 @@
         <h2>Log in to your account</h2>
 
         <#if loggedIn>
-            You are already logged in.</br>
+            You are already logged in.<br />
             <a href="?cmd=show">See the Lists</a>
         <#else>
             <form action="?cmd=login" method="post">
 
-                User name: <input type="text" name="username" size=60></input><br />
-                Password: <input type="password" name="password" size=60></input><br />
+                User name: <input type="text" name="username" size=60 /><br />
+                Password: <input type="password" name="password" size=60 /><br />
 
                 <input type="submit" value="Submit" />
                 <input class="button" type="button" onclick="window.location.replace('/topten/lists')" value="Cancel" />
