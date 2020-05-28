@@ -95,7 +95,6 @@ public class TopTenListsServlet extends HttpServlet {
                 if (session != null) {
                     session.invalidate();
                 }
-
                 template = "confirm.ftl";
                 model.put("message", "You have been successfully logged out.<br /><a href='?cmd=home'>Home</a>");
                 break;
@@ -163,6 +162,9 @@ public class TopTenListsServlet extends HttpServlet {
         String message = "";
         String template = "confirm.ftl";
         Map<String, Object> model = new HashMap<>();
+        String username = "";
+        String password = "";
+        Member member;
         
         switch (command) {
 
@@ -171,23 +173,23 @@ public class TopTenListsServlet extends HttpServlet {
 
                 if (newList == null) {
                     logger.info("Create request ignored because one or more fields were empty.");
-                    message = "Your new TopTenList was not created because one or more fields were empty.";
+                    message = "Your new TopTenList was not created because one or more fields were empty.<br /><a href='?cmd=home'>Home</a>";
                     break;
                 }
 
                 if (listsDao.insert(newList) > 0)
-                    message = "Your new TopTen List has been created successfully.";
+                    message = "Your new TopTen List has been created successfully.<br /><a href='?cmd=home'>Home</a>";
                 else
-                    message = "There was a problem adding your list to the database.";
+                    message = "There was a problem adding your list to the database.<br /><a href='?cmd=home'>Home</a>";
                 break;
 
             case "login":
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
+                username = request.getParameter("username");
+                password = request.getParameter("password");
                 
-                Member member = membersDao.search(username);
+                member = membersDao.search(username);
                 if (member == null) {
-                    message = "We do not have a member with that username on file.  Please try again.";
+                    message = "We do not have a member with that username on file. Please try again.<br /><a href='?cmd=login'>Log In</a>";
                     model.put("loggedIn", loggedIn);
                     model.put("message", message);
                     break;
@@ -202,7 +204,7 @@ public class TopTenListsServlet extends HttpServlet {
 
                     message = "You have been successfully logged in to your account.<br /><a href='?cmd=show'>Show Lists</a>";
                 } else {
-                    message = "Your password did not match what we have on file.  Please try again.";
+                    message = "Your password did not match what we have on file.  Please try again.<br /><a href='?cmd=login'>Log In</a>";
                 }
 
                 model.put("loggedIn", loggedIn);
