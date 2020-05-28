@@ -99,6 +99,13 @@ public class TopTenListsServlet extends HttpServlet {
                 model.put("message", "You have been successfully logged out.<br /><a href='?cmd=home'>Home</a>");
                 break;
 
+            case "register":
+                if (session != null) {
+                    session.invalidate();
+                }
+                template = "register.ftl";
+                break;
+
             case "show":
                 String indexParam = request.getParameter("index");
 
@@ -208,6 +215,24 @@ public class TopTenListsServlet extends HttpServlet {
                 }
 
                 model.put("loggedIn", loggedIn);
+                model.put("message", message);
+                break;
+
+            case "register":
+                username = request.getParameter("username");
+                password = request.getParameter("password");
+                
+                member = membersDao.search(username);
+                if (member != null) {
+                    message = "That username is already registered here. Please use a different username.<br /><a href='?cmd=login'>Log In</a>";
+                    model.put("message", message);
+                    break;
+                }
+
+                member = new Member(username, password);
+                membersDao.insert(member);
+
+                message = "Welcome to TopTopTenLists.com!  You are now a registered member. Please <a href='?cmd=login'>log in</a>.";
                 model.put("message", message);
                 break;
 
