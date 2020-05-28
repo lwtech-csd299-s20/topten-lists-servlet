@@ -25,7 +25,7 @@ public class TopTenList {
 
         if (id < -1) throw new IllegalArgumentException("Invalid TopTenList argument: id < -1");
         if (description == null) throw new IllegalArgumentException("Invalid TopTenList argument: description is null");
-        if (description == "") throw new IllegalArgumentException("Invalid TopTenList argument: description is empty");
+        if (description.isEmpty()) throw new IllegalArgumentException("Invalid TopTenList argument: description is empty");
         if (items == null) throw new IllegalArgumentException("Invalid TopTenList argument: item list is null");
         if (items.size() < 10) throw new IllegalArgumentException("Invalid TopTenList argument: less than 10 items");
         if (ownerID < 0) throw new IllegalArgumentException("Invalid TopTenList argument: ownerID < 0");

@@ -19,8 +19,8 @@ public class Member {
 
     public Member(int id, String email, String password) {
 
-        if (email == null || email == "") throw new IllegalArgumentException("Member: email cannot be empty or null");
-        if (password == null || password == "") throw new IllegalArgumentException("Member: password cannot be empty or null");
+        if (email == null || email.isEmpty()) throw new IllegalArgumentException("Member: email cannot be empty or null");
+        if (password == null || password.isEmpty()) throw new IllegalArgumentException("Member: password cannot be empty or null");
 
         this.id = id;
         this.email = email;
