@@ -14,14 +14,14 @@ public class TopTenList {
     private long numLikes;
     
     public TopTenList(int id, TopTenList list) {
-        this(id, list.description, list.items, list.published, list.ownerID);
+        this(id, list.description, list.items, list.published, list.ownerID, list.numViews, list.numLikes);
     }
 
     public TopTenList(String description, List<String> items, int ownerID) {
-        this(-1, description, items, false, ownerID);
+        this(-1, description, items, false, ownerID, 0, 0);
     }
     
-    public TopTenList(int id, String description, List<String> items, boolean published, int ownerID) {
+    public TopTenList(int id, String description, List<String> items, boolean published, int ownerID, long numViews, long numLikes) {
 
         if (id < -1) throw new IllegalArgumentException("Invalid TopTenList argument: id < -1");
         if (description == null) throw new IllegalArgumentException("Invalid TopTenList argument: description is null");
@@ -29,14 +29,16 @@ public class TopTenList {
         if (items == null) throw new IllegalArgumentException("Invalid TopTenList argument: item list is null");
         if (items.size() < 10) throw new IllegalArgumentException("Invalid TopTenList argument: less than 10 items");
         if (ownerID < 0) throw new IllegalArgumentException("Invalid TopTenList argument: ownerID < 0");
+        if (numViews < 0) throw new IllegalArgumentException("Invalid TopTenList argument: numViews < 0");
+        if (numLikes < 0) throw new IllegalArgumentException("Invalid TopTenList argument: numLikes < 0");
 
         this.id = id;
         this.description = description;
         this.items = items;
         this.ownerID = ownerID;
         this.published = published;
-        this.numViews = 0;
-        this.numLikes = 0;
+        this.numViews = numViews;
+        this.numLikes = numLikes;
     }
     
     public int getID() {
