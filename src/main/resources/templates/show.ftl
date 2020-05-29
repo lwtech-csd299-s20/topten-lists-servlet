@@ -22,10 +22,10 @@
         <#if loggedIn>
             <a href="?cmd=add">Add a New List</a><br />
             <a href="?cmd=logout">Log Out</a><br />
-            <a href="?cmd=home">Home</a>
         <#else>
             <a href="?cmd=login">Log In</a><br />
-            <a href="?cmd=home">Home</a>
+            <a href="?cmd=register">Register</a><br />
         </#if>
+        <a href="?cmd=home">Home</a>
     </body>
 </html>

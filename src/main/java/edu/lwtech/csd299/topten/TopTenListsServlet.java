@@ -122,7 +122,9 @@ public class TopTenListsServlet extends HttpServlet {
                 if (prevIndex < 0) prevIndex = numItems-1;
 
                 template = "show.ftl";
-                model.put("topTenList", listsDao.getByIndex(index));
+                TopTenList list = listsDao.getByIndex(index);
+                
+                model.put("topTenList", list);
                 model.put("listNumber", index+1);                   // Java uses 0-based indexes.  Users want to see 1-based indexes.
                 model.put("prevIndex", prevIndex);
                 model.put("nextIndex", nextIndex);
