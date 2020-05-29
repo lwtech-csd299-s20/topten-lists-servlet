@@ -101,6 +101,10 @@ public class MemberMemoryDAO implements DAO<Member> {
         return memoryDB.size();
     }
 
+    public boolean update(Member member) {
+        return false;
+    }
+
     public void disconnect() {
         memoryDB = null;
     }

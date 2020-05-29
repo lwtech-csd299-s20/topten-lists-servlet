@@ -99,5 +99,14 @@ public class TopTenListMemoryDAOTests {
         allLists = memoryDAO.getAll();
         assertEquals(3, allLists.size());
     }
+
+    @Test
+    public void updateTest() {
+        TopTenList list = memoryDAO.getByID(1000);
+        list.publish(1);
+        memoryDAO.update(list);
+        list = memoryDAO.getByID(1000);
+        assertTrue(list.isPublished());
+    }
     
 }

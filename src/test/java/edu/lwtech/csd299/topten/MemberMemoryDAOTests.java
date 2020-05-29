@@ -54,5 +54,10 @@ public class MemberMemoryDAOTests {
         allLists = memoryDAO.getAll();
         assertEquals(3, allLists.size());
     }
-    
+
+    @Test
+    public void updateTest() {
+        assertFalse(memoryDAO.update(new Member("A", "B")));
+    }    
+
 }

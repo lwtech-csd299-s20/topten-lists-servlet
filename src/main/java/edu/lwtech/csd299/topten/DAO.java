@@ -12,5 +12,6 @@ public interface DAO<T> {
     public List<Integer> getAllIDs();
     public T search(String keyword);
     public int size();
+    public boolean update(T pojo);
     public void disconnect();
 }
