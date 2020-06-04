@@ -12,35 +12,52 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "mvn -B surefire:test",
+            "command": "mvn -B test",
             "group": "test"
         },
         {
             "label": "clean",
             "type": "shell",
-            "command": "mvn -B clean:clean",
+            "command": "mvn -B clean",
             "group": "build"
         },
         {
             "label": "compile",
             "type": "shell",
-            "command": "mvn -B resources:resources compiler:compile compiler:testCompile",
+            "command": "mvn -B compile",
             "group": "build"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "mvn -B surefire:test",
+            "group": "test"
+        },
+        {
+            "label": "test-coverage",
+            "type": "shell",
+            "command": "mvn -B surefire:test jacoco:prepare-agent install jacoco:report",
+            "group": "test"
         },
         {
             "label": "build",
             "type": "shell",
-            "command": "mvn -B resources:resources compiler:compile resources:testResources compiler:testCompile surefire:test war:war install:install",
+            "command": "mvn -B package",
             "group": "build"
         },
         {
             "label": "clean+build",
             "type": "shell",
-            "command": "mvn -B clean:clean resources:resources compiler:compile resources:testResources compiler:testCompile surefire:test war:war install:install",
+            "command": "mvn -B clean:clean compiler:compile compiler:testCompile surefire:test jacoco:prepare-agent install jacoco:report",
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "java -cp \"target/*\" edu.lwtech.csd299.samples.mavenadventure.AdventureGame"
         }
     ]
 }
