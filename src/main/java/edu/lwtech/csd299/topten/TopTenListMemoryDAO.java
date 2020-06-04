@@ -107,6 +107,7 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
 
         delete(id);
         memoryDB.add(new TopTenList(id, list));
+        memoryDB.sort(Comparator.comparing(TopTenList::getID));
         return true;
 
     }
