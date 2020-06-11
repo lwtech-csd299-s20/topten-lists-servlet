@@ -45,7 +45,7 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
 
         String description = list.getDescription();
         List<String> items = list.getItems();
-        String isPublished = list.isPublished() ? "true" : "false";
+        String isPublished = list.isPublished() ? "Y" : "N";
         String ownerID = "" + list.getOwnerID();
         String numViews = "" + list.getNumViews();
         String numLikes = "" + list.getNumLikes();
@@ -97,7 +97,7 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
 
         String query = "SELECT listID, description,";
         query += " item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, isPublished, ownerID, numViews, numLikes";
-        query += " FROM TopTenLists ORDER BY listID DESC LIMIT " + index;
+        query += " FROM TopTenLists ORDER BY listID LIMIT " + index;
 
         List<SQLRow> rows = SQLUtils.executeSQL(conn, query);
         
@@ -177,9 +177,16 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
     }
 
     @Override
-    public boolean update(TopTenList pojo) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean update(TopTenList list) {
+        logger.debug("Updating views and likes for list #" + list.getID());
+
+        String query = "UPDATE TopTenLists " + 
+                "SET numViews='" + list.getNumViews() + "', numLikes='" + list.getNumLikes() + "' " +
+                "WHERE listID='" + list.getID() + "'";
+
+        List<SQLRow> rows = SQLUtils.executeSQL(conn, query);
+
+        return (rows != null);
     }
 
     public void disconnect() {
