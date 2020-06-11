@@ -42,10 +42,10 @@ public class TopTenListsServlet extends HttpServlet {
         
         membersDao = new MemberMemoryDAO();
         addDemoMemberData();
-        listsDao = new TopTenListMemoryDAO();
-        addDemoTopTenListData();
-        //listsDao = new TopTenListSqlDAO();
-        //listsDao.init();
+        //listsDao = new TopTenListMemoryDAO();
+        //addDemoTopTenListData();
+        listsDao = new TopTenListSqlDAO();
+        listsDao.init();
 
         logger.warn("Initialize complete!");
     }
