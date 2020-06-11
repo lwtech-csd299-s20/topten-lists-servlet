@@ -71,12 +71,12 @@ public class TopTenListsServlet extends HttpServlet {
             }
         }
 
-        String template = "";
+        String template = null;                 // 404 will be returned if template isn't set inside the switch statement
+        TopTenList list = null;
         Map<String, Object> model = new HashMap<>();
         model.put("owner", owner);
         model.put("loggedIn", loggedIn);
 
-        //TODO: Add more URL commands to the servlet
         switch (command) {
 
             case "add":
@@ -108,15 +108,19 @@ public class TopTenListsServlet extends HttpServlet {
                 template = "register.ftl";
                 break;
 
-            case "show":
-                String indexParam = request.getParameter("index");
+            case "like":
+                int id = parseInt(request.getParameter("id"));
+                if (id < 0) break;
 
-                int index = 0;
-                try {
-                    index = (indexParam == null) ? 0 : Integer.parseInt(indexParam);
-                } catch (NumberFormatException e) {
-                    index = 0;
-                }
+                list = listsDao.getByID(id);
+                if (list == null) break;
+
+                list.addLike();
+                // FALL THRU TO case "show" !!!
+
+            case "show":
+                int index = parseInt(request.getParameter("index"));
+                if (index < 0) index = 0;
 
                 int numItems = listsDao.getAllIDs().size();
                 int nextIndex = (index + 1) % numItems;
@@ -124,7 +128,9 @@ public class TopTenListsServlet extends HttpServlet {
                 if (prevIndex < 0) prevIndex = numItems-1;
 
                 template = "show.ftl";
-                TopTenList list = listsDao.getByIndex(index);
+                if (list == null) {                                 // i.e., if we didn't fall thru from the "like" case
+                    list = listsDao.getByIndex(index);
+                }
                 list.addView();
                 listsDao.update(list);
                 model.put("topTenList", list);
@@ -135,15 +141,19 @@ public class TopTenListsServlet extends HttpServlet {
                 
             default:
                 logger.debug("Unknown GET command received: " + command);
-
-                // Send 404 error response
-                try {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                } catch (IOException e)  {
-                    logger.error("IO Error: ", e);
-                }
-                return;
+                break;
         }
+
+        if (template == null) {
+            // Send 404 error response
+            try {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } catch (IOException e)  {
+                logger.error("IO Error: ", e);
+            }
+            return;
+        }
+
         processTemplate(response, template, model);
 
         long time = System.currentTimeMillis() - startTime;
@@ -275,6 +285,18 @@ public class TopTenListsServlet extends HttpServlet {
 
     // ========================================================================
 
+    private int parseInt(String s) {
+        int i = -1;
+        if (s != null) {
+            try {
+                i = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                i = -2;
+            }
+        }
+        return i;
+    }
+
     private void processTemplate(HttpServletResponse response, String template, Map<String, Object> model) {
         logger.debug("Processing Template: " + template);
         
@@ -320,60 +342,60 @@ public class TopTenListsServlet extends HttpServlet {
         logger.info(membersDao.size() + " members inserted");
     }
 
-    private void addDemoTopTenListData() {
-        logger.debug("Creating demo TopTenLists...");
+    // private void addDemoTopTenListData() {
+    //     logger.debug("Creating demo TopTenLists...");
 
-        String description;
-        List<String> items;
+    //     String description;
+    //     List<String> items;
     
-        int owner = 1;
+    //     int owner = 1;
 
-        description = "Top 10 Favorite Roman Numerals";
-        items = Arrays.asList(
-            "X",
-            "IX",
-            "VIII",
-            "VII",
-            "VI",
-            "V",
-            "IV",
-            "III",
-            "II",
-            "I"
-        );
-        listsDao.insert(new TopTenList(description, items, owner));
+    //     description = "Top 10 Favorite Roman Numerals";
+    //     items = Arrays.asList(
+    //         "X",
+    //         "IX",
+    //         "VIII",
+    //         "VII",
+    //         "VI",
+    //         "V",
+    //         "IV",
+    //         "III",
+    //         "II",
+    //         "I"
+    //     );
+    //     listsDao.insert(new TopTenList(description, items, owner));
 
-        description = "Top 10 Favorite Planets";
-        items = Arrays.asList(
-            "Hollywood",
-            "Neptune",
-            "Uranus",
-            "Venus",
-            "Mercury",
-            "Earth",
-            "Mars",
-            "Jupiter",
-            "Saturn",
-            "Pluto!!!"
-        );
-        listsDao.insert(new TopTenList(description, items, owner));
+    //     description = "Top 10 Favorite Planets";
+    //     items = Arrays.asList(
+    //         "Hollywood",
+    //         "Neptune",
+    //         "Uranus",
+    //         "Venus",
+    //         "Mercury",
+    //         "Earth",
+    //         "Mars",
+    //         "Jupiter",
+    //         "Saturn",
+    //         "Pluto!!!"
+    //     );
+    //     listsDao.insert(new TopTenList(description, items, owner));
         
-        description = "Top 10 Favorite Star Wars Movies";
-        items = Arrays.asList(
-            "III: Revenge of the Sith",
-            "II: Attack of the Clones",
-            "VIII: The Last Jedi",
-            "IX: The Rise of Skywalker",
-            "VI: Return of the Jedi",
-            "I: The Phantom Menace",
-            "VII: The Force Awakens",
-            "The Mandelorian Compilation",
-            "IV: A New Hope",
-            "V: The Empire Strikes Back"
-        );
-        listsDao.insert(new TopTenList(description, items, owner));
+    //     description = "Top 10 Favorite Star Wars Movies";
+    //     items = Arrays.asList(
+    //         "III: Revenge of the Sith",
+    //         "II: Attack of the Clones",
+    //         "VIII: The Last Jedi",
+    //         "IX: The Rise of Skywalker",
+    //         "VI: Return of the Jedi",
+    //         "I: The Phantom Menace",
+    //         "VII: The Force Awakens",
+    //         "The Mandelorian Compilation",
+    //         "IV: A New Hope",
+    //         "V: The Empire Strikes Back"
+    //     );
+    //     listsDao.insert(new TopTenList(description, items, owner));
         
-        logger.info(listsDao.size() + " lists inserted");
-    }
+    //     logger.info(listsDao.size() + " lists inserted");
+    // }
 
 }

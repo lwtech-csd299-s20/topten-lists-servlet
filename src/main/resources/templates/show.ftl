@@ -9,12 +9,15 @@
         <h1>Top Top 10 List #${listNumber}</h1>
         <h2>${topTenList.description}</h2>
 
+        <h3>Likes: ${topTenList.numLikes}</h3>
+
         <ol start=10 reversed>
         <#list topTenList.items as item>
             <li>${item}</li>
         </#list>
         </ol>
 
+        <a href="?cmd=like&index=${listNumber-1}&id=${topTenList.ID}">Like</a> &nbsp; &nbsp;
         <a href="?cmd=show&index=${prevIndex}">Previous</a> &nbsp; &nbsp;
         <a href="?cmd=show&index=${nextIndex}">Next</a><br/>
         <br />
