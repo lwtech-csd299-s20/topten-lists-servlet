@@ -155,13 +155,30 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
         return listIDs;
     }
 
-    @Override
-    public TopTenList search(String keyword) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<TopTenList> search(String keyword) {
+        logger.debug("Searching for list with '" + keyword + "'");
+
+        String query = "SELECT listID FROM TopTenLists WHERE ";
+        for (int i=1; i <= 10; i++) {
+            query += "item" + i + " like '%" + keyword + "%' OR ";
+        }        
+        query += " ORDER BY listID";
+
+        List<SQLRow> rows = SQLUtils.executeSQL(conn, query);
+        
+        if (rows == null) {
+            logger.debug("No lists found!");
+            return null;
+        }
+       
+        List<TopTenList> lists = new ArrayList<>();
+        for (SQLRow row : rows) {
+            TopTenList toptenlist = convertRowToList(row);
+            lists.add(toptenlist);
+        }
+        return lists;
     }
 
-    @Override
     public int size() {
         logger.debug("Getting the number of rows...");
 
@@ -177,7 +194,6 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
         return Integer.parseInt(value);
     }
 
-    @Override
     public boolean update(TopTenList list) {
         logger.debug("Updating views and likes for list #" + list.getID());
 
