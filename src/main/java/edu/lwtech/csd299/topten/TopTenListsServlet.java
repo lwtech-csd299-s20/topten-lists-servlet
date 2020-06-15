@@ -39,13 +39,27 @@ public class TopTenListsServlet extends HttpServlet {
             logger.error("Template directory not found in directory: " + templateDir, e);
         }
         logger.info("Successfully Loaded Freemarker");
+
+        // ======== UNCOMMENT TO USE MEMORY DAOs ========
         
-        membersDao = new MemberMemoryDAO();
-        addDemoMemberData();
-        //listsDao = new TopTenListMemoryDAO();
-        //addDemoTopTenListData();
+        // membersDao = new MemberMemoryDAO();
+        // addDemoMemberData();
+        // listsDao = new TopTenListMemoryDAO();
+        // addDemoTopTenListData();
+
+        // ======== UNCOMMENT TO USE SQL DAOs ========
+        
+        //String jdbc = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
+        String jdbc = "jdbc:mariadb://csd299.cv18zcsjzteu.us-west-2.rds.amazonaws.com:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
+
+        String user = "topten";
+        String password = "lwtech2000";
+        String driver = "org.mariadb.jdbc.Driver";      // The MariaDB driver works better than the MySQL driver
+
+        membersDao = new MemberSqlDAO();
+        membersDao.init(jdbc, user, password, driver);
         listsDao = new TopTenListSqlDAO();
-        listsDao.init();
+        listsDao.init(jdbc, user, password, driver);
 
         logger.warn("Initialize complete!");
     }

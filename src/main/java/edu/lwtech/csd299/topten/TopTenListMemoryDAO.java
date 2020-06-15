@@ -16,7 +16,7 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
         this.memoryDB = new ArrayList<>();
     }
 
-    public boolean init() {
+    public boolean init(String jdbc, String user, String password, String driver) {
         return true;
     }
 

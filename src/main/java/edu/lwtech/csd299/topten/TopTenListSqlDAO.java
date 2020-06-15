@@ -15,16 +15,12 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
         this.conn = null;                                   // conn must be created during init()
     }
 
-    public boolean init() {
+    public boolean init(String jdbc, String user, String password, String driver) {
         logger.info("Connecting to the database...");
 
-        String jdbcDriver = "org.mariadb.jdbc.Driver";      // The MariaDB driver works better than the MySQL driver
-        // String url = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
-        String url = "jdbc:mariadb://csd299.cv18zcsjzteu.us-west-2.rds.amazonaws.com:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
-
-        conn = SQLUtils.connect(url, "topten", "lwtech2000", jdbcDriver);       //TODO: Remove DB credentials from the source code!
+        conn = SQLUtils.connect(jdbc, user, password, driver);       //TODO: Remove DB credentials from the source code!
         if (conn == null) {
-            logger.error("Unable to connect to SQL Database with URL: " + url);
+            logger.error("Unable to connect to SQL Database with URL: " + jdbc);
             return false;
         }
         logger.info("...connected!");
