@@ -19,7 +19,8 @@ public class TopTenListSqlDAO implements DAO<TopTenList> {
         logger.info("Connecting to the database...");
 
         String jdbcDriver = "org.mariadb.jdbc.Driver";      // The MariaDB driver works better than the MySQL driver
-        String url = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
+        // String url = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
+        String url = "jdbc:mariadb://csd299.cv18zcsjzteu.us-west-2.rds.amazonaws.com:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
 
         conn = SQLUtils.connect(url, "topten", "lwtech2000", jdbcDriver);       //TODO: Remove DB credentials from the source code!
         if (conn == null) {
