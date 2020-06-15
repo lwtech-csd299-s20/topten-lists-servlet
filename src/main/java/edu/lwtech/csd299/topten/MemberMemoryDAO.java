@@ -83,18 +83,18 @@ public class MemberMemoryDAO implements DAO<Member> {
         return memberIDs;
     }
 
-    public Member search(String keyword) {
+    public List<Member> search(String keyword) {
         logger.debug("Trying to get member with email address containing: " + keyword);
         
         keyword = keyword.toLowerCase();
-        Member memberFound = null;
+        List<Member> membersFound = new ArrayList<>();
         for (Member member : memoryDB) {
             if (member.getEmail().toLowerCase().contains(keyword)) {
-                memberFound = member;
+                membersFound.add(member);
                 break;
             }
         }
-        return memberFound;
+        return membersFound;
     }
 
     public int size() {
