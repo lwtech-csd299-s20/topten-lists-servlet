@@ -101,15 +101,18 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
         return memoryDB.size();
     }
 
-    public boolean update(TopTenList list) {
-        int id = list.getID();
-        logger.debug("Updating list (" + id + ") with " + list);
+    public boolean update(TopTenList newList) {
+        int id = newList.getID();
+        logger.debug("Updating list (" + id + ") with " + newList);
 
-        delete(id);
-        memoryDB.add(new TopTenList(id, list));
+        TopTenList oldList = getByID(id);
+        if (oldList == null)
+            return false;
+
+        memoryDB.remove(oldList);
+        memoryDB.add(newList);
         memoryDB.sort(Comparator.comparing(TopTenList::getID));
         return true;
-
     }
 
     public void disconnect() {
