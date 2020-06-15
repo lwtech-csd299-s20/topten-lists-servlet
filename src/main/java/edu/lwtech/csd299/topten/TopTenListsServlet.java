@@ -187,6 +187,7 @@ public class TopTenListsServlet extends HttpServlet {
         String username = "";
         String password = "";
         Member member;
+        List<Member> members;
         
         switch (command) {
 
@@ -209,14 +210,15 @@ public class TopTenListsServlet extends HttpServlet {
                 username = request.getParameter("username");
                 password = request.getParameter("password");
                 
-                member = membersDao.search(username);
-                if (member == null) {
+                members = membersDao.search(username);
+                if (members == null || members.isEmpty()) {
                     message = "We do not have a member with that username on file. Please try again.<br /><a href='?cmd=login'>Log In</a>";
                     model.put("loggedIn", loggedIn);
                     model.put("message", message);
                     break;
                 }
 
+                member = members.get(0);
                 if (member.getPassword().equals(password)) {
                     owner = member.getID();
                     loggedIn = true;
@@ -237,8 +239,8 @@ public class TopTenListsServlet extends HttpServlet {
                 username = request.getParameter("username");
                 password = request.getParameter("password");
                 
-                member = membersDao.search(username);
-                if (member != null) {
+                members = membersDao.search(username);
+                if (members != null && !members.isEmpty()) {
                     message = "That username is already registered here. Please use a different username.<br /><a href='?cmd=login'>Log In</a>";
                     model.put("message", message);
                     break;
