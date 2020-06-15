@@ -55,9 +55,10 @@ public class MemberMemoryDAOTests {
         assertEquals(3, allLists.size());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void updateTest() {
-        assertFalse(memoryDAO.update(new Member("A", "B")));
-    }    
+        memoryDAO.update(new Member("A", "B"));
+        fail();
+    }
 
 }

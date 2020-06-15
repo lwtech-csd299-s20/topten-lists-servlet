@@ -102,7 +102,7 @@ public class MemberMemoryDAO implements DAO<Member> {
     }
 
     public boolean update(Member member) {
-        return false;
+        throw new UnsupportedOperationException("Unable to update existing member in database.");
     }
 
     public void disconnect() {
