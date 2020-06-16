@@ -68,7 +68,7 @@ public class MemberSqlDAO implements DAO<Member> {
         }
         
         SQLRow row = rows.get(0);
-        Member member = convertRowToList(row);
+        Member member = convertRowToMember(row);
         return member;
     }
     
@@ -91,7 +91,7 @@ public class MemberSqlDAO implements DAO<Member> {
         }
         
         SQLRow row = rows.get(rows.size()-1);
-        Member member = convertRowToList(row);
+        Member member = convertRowToMember(row);
         return member;
     }
     
@@ -110,7 +110,7 @@ public class MemberSqlDAO implements DAO<Member> {
        
         List<Member> members = new ArrayList<>();
         for (SQLRow row : rows) {
-            Member member = convertRowToList(row);
+            Member member = convertRowToMember(row);
             members.add(member);
         }
         return members;
@@ -140,7 +140,7 @@ public class MemberSqlDAO implements DAO<Member> {
     public List<Member> search(String keyword) {
         logger.debug("Searching for member with '" + keyword + "'");
 
-        String query = "SELECT memberID FROM Members WHERE";
+        String query = "SELECT memberID, email, password FROM Members WHERE";
         query += " email like '%" + keyword + "%'";
         query += " ORDER BY memberID";
 
@@ -153,7 +153,7 @@ public class MemberSqlDAO implements DAO<Member> {
        
         List<Member> members = new ArrayList<>();
         for (SQLRow row : rows) {
-            Member member = convertRowToList(row);
+            Member member = convertRowToMember(row);
             members.add(member);
         }
         return members;
@@ -186,7 +186,8 @@ public class MemberSqlDAO implements DAO<Member> {
 
     // =====================================================================
 
-    private Member convertRowToList(SQLRow row) {
+    private Member convertRowToMember(SQLRow row) {
+        logger.debug("Converting " + row + " to Member...");
         int memberID = Integer.parseInt(row.getItem("memberID"));
         String email = row.getItem("email");
         String password = row.getItem("password");
