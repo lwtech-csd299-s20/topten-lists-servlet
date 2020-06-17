@@ -17,6 +17,7 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
     }
 
     public boolean init(String jdbc, String user, String password, String driver) {
+        addDemoTopTenListData();
         return true;
     }
 
@@ -129,7 +130,64 @@ public class TopTenListMemoryDAO implements DAO<TopTenList> {
 
     // =================================================================
     
-    public synchronized int generateNextID() {
+    private synchronized int generateNextID() {
         return nextID++;
     }
+
+    private void addDemoTopTenListData() {
+        logger.debug("Creating demo TopTenLists...");
+
+        String description;
+        List<String> items;
+    
+        int owner = 1;
+
+        description = "Top 10 Favorite Roman Numerals";
+        items = Arrays.asList(
+            "X",
+            "IX",
+            "VIII",
+            "VII",
+            "VI",
+            "V",
+            "IV",
+            "III",
+            "II",
+            "I"
+        );
+        insert(new TopTenList(description, items, owner));
+
+        description = "Top 10 Favorite Planets";
+        items = Arrays.asList(
+            "Hollywood",
+            "Neptune",
+            "Uranus",
+            "Venus",
+            "Mercury",
+            "Earth",
+            "Mars",
+            "Jupiter",
+            "Saturn",
+            "Pluto!!!"
+        );
+        insert(new TopTenList(description, items, owner));
+        
+        description = "Top 10 Favorite Star Wars Movies";
+        items = Arrays.asList(
+            "III: Revenge of the Sith",
+            "II: Attack of the Clones",
+            "VIII: The Last Jedi",
+            "IX: The Rise of Skywalker",
+            "VI: Return of the Jedi",
+            "I: The Phantom Menace",
+            "VII: The Force Awakens",
+            "The Mandelorian Compilation",
+            "IV: A New Hope",
+            "V: The Empire Strikes Back"
+        );
+        insert(new TopTenList(description, items, owner));
+        
+        logger.info(size() + " lists inserted");
+    }
+
 }

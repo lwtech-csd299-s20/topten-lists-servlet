@@ -40,25 +40,21 @@ public class TopTenListsServlet extends HttpServlet {
         }
         logger.info("Successfully Loaded Freemarker");
 
-        // ======== UNCOMMENT TO USE MEMORY DAOs ========
-        
-        // membersDao = new MemberMemoryDAO();
-        // addDemoMemberData();
-        // listsDao = new TopTenListMemoryDAO();
-        // addDemoTopTenListData();
-
-        // ======== UNCOMMENT TO USE SQL DAOs ========
-        
-        //String jdbc = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
+        // String jdbc = "jdbc:mariadb://localhost:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
         String jdbc = "jdbc:mariadb://csd299.cv18zcsjzteu.us-west-2.rds.amazonaws.com:3306/topten?useSSL=false&allowPublicKeyRetrieval=true";
-
         String user = "topten";
         String password = "lwtech2000";
         String driver = "org.mariadb.jdbc.Driver";      // The MariaDB driver works better than the MySQL driver
 
+        // ======== UNCOMMENT TO USE MEMORY DAOs ========
+        // membersDao = new MemberMemoryDAO();
+        // listsDao = new TopTenListMemoryDAO();
+
+        // ======== UNCOMMENT TO USE SQL DAOs ========
         membersDao = new MemberSqlDAO();
-        membersDao.init(jdbc, user, password, driver);
         listsDao = new TopTenListSqlDAO();
+
+        membersDao.init(jdbc, user, password, driver);
         listsDao.init(jdbc, user, password, driver);
 
         logger.warn("Initialize complete!");
@@ -341,77 +337,5 @@ public class TopTenListsServlet extends HttpServlet {
         
         return new TopTenList(description, items, owner);
     }
-
-    // ======================================================================
-
-    private void addDemoMemberData() {
-        logger.debug("Creating demo Members...");
-
-        Member member;
-        member = new Member("fred@lwtech.edu", "12345678");
-        membersDao.insert(member);
-        member = new Member("tom@lwtech.edu", "12345678");
-        membersDao.insert(member);
-        member = new Member("mary@lwtech.edu", "12345678");
-        membersDao.insert(member);
-
-        logger.info(membersDao.size() + " members inserted");
-    }
-
-    // private void addDemoTopTenListData() {
-    //     logger.debug("Creating demo TopTenLists...");
-
-    //     String description;
-    //     List<String> items;
-    
-    //     int owner = 1;
-
-    //     description = "Top 10 Favorite Roman Numerals";
-    //     items = Arrays.asList(
-    //         "X",
-    //         "IX",
-    //         "VIII",
-    //         "VII",
-    //         "VI",
-    //         "V",
-    //         "IV",
-    //         "III",
-    //         "II",
-    //         "I"
-    //     );
-    //     listsDao.insert(new TopTenList(description, items, owner));
-
-    //     description = "Top 10 Favorite Planets";
-    //     items = Arrays.asList(
-    //         "Hollywood",
-    //         "Neptune",
-    //         "Uranus",
-    //         "Venus",
-    //         "Mercury",
-    //         "Earth",
-    //         "Mars",
-    //         "Jupiter",
-    //         "Saturn",
-    //         "Pluto!!!"
-    //     );
-    //     listsDao.insert(new TopTenList(description, items, owner));
-        
-    //     description = "Top 10 Favorite Star Wars Movies";
-    //     items = Arrays.asList(
-    //         "III: Revenge of the Sith",
-    //         "II: Attack of the Clones",
-    //         "VIII: The Last Jedi",
-    //         "IX: The Rise of Skywalker",
-    //         "VI: Return of the Jedi",
-    //         "I: The Phantom Menace",
-    //         "VII: The Force Awakens",
-    //         "The Mandelorian Compilation",
-    //         "IV: A New Hope",
-    //         "V: The Empire Strikes Back"
-    //     );
-    //     listsDao.insert(new TopTenList(description, items, owner));
-        
-    //     logger.info(listsDao.size() + " lists inserted");
-    // }
 
 }
