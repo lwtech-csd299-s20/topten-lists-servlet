@@ -18,8 +18,8 @@ public class TopTenListsServlet extends HttpServlet {
     private static final String TEMPLATE_DIR = "/WEB-INF/classes/templates";
     private static final Configuration freemarker = new Configuration(Configuration.getVersion());
 
-    private DAO<Member> membersDao = null;
-    private DAO<TopTenList> listsDao = null;
+    private DAO<Member> membersDAO = null;
+    private DAO<TopTenList> listsDAO = null;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -51,11 +51,11 @@ public class TopTenListsServlet extends HttpServlet {
         // listsDao = new TopTenListMemoryDAO();
 
         // ======== UNCOMMENT TO USE SQL DAOs ========
-        membersDao = new MemberSqlDAO();
-        listsDao = new TopTenListSqlDAO();
+        membersDAO = new MemberSqlDAO();
+        listsDAO = new TopTenListSqlDAO();
 
-        membersDao.init(jdbc, user, password, driver);
-        listsDao.init(jdbc, user, password, driver);
+        membersDAO.init(jdbc, user, password, driver);
+        listsDAO.init(jdbc, user, password, driver);
 
         logger.warn("Initialize complete!");
     }
@@ -94,7 +94,7 @@ public class TopTenListsServlet extends HttpServlet {
                 break;
 
             case "home":
-                List<TopTenList> topTenLists = listsDao.getAll();
+                List<TopTenList> topTenLists = listsDAO.getAll();
                 model.put("topTenLists", topTenLists);
                 template = "home.ftl";
                 break;
@@ -122,7 +122,7 @@ public class TopTenListsServlet extends HttpServlet {
                 int id = parseInt(request.getParameter("id"));
                 if (id < 0) break;
 
-                list = listsDao.getByID(id);
+                list = listsDAO.getByID(id);
                 if (list == null) break;
 
                 list.addLike();
@@ -132,17 +132,17 @@ public class TopTenListsServlet extends HttpServlet {
                 int index = parseInt(request.getParameter("index"));
                 if (index < 0) index = 0;
 
-                int numItems = listsDao.getAllIDs().size();
+                int numItems = listsDAO.getAllIDs().size();
                 int nextIndex = (index + 1) % numItems;
                 int prevIndex = index - 1;
                 if (prevIndex < 0) prevIndex = numItems-1;
 
                 template = "show.ftl";
                 if (list == null) {                                 // i.e., if we didn't fall thru from the "like" case
-                    list = listsDao.getByIndex(index);
+                    list = listsDAO.getByIndex(index);
                 }
                 list.addView();
-                listsDao.update(list);
+                listsDAO.update(list);
                 model.put("topTenList", list);
                 model.put("listNumber", index+1);                   // Java uses 0-based indexes.  Users want to see 1-based indexes.
                 model.put("prevIndex", prevIndex);
@@ -210,7 +210,7 @@ public class TopTenListsServlet extends HttpServlet {
                     break;
                 }
 
-                if (listsDao.insert(newList) > 0)
+                if (listsDAO.insert(newList) > 0)
                     message = "Your new TopTen List has been created successfully.<br /><a href='?cmd=home'>Home</a>";
                 else
                     message = "There was a problem adding your list to the database.<br /><a href='?cmd=home'>Home</a>";
@@ -220,7 +220,7 @@ public class TopTenListsServlet extends HttpServlet {
                 username = request.getParameter("username");
                 password = request.getParameter("password");
                 
-                members = membersDao.search(username);
+                members = membersDAO.search(username);
                 if (members == null || members.isEmpty()) {
                     message = "We do not have a member with that username on file. Please try again.<br /><a href='?cmd=login'>Log In</a>";
                     model.put("loggedIn", loggedIn);
@@ -249,7 +249,7 @@ public class TopTenListsServlet extends HttpServlet {
                 username = request.getParameter("username");
                 password = request.getParameter("password");
                 
-                members = membersDao.search(username);
+                members = membersDAO.search(username);
                 if (members != null && !members.isEmpty()) {
                     message = "That username is already registered here. Please use a different username.<br /><a href='?cmd=login'>Log In</a>";
                     model.put("message", message);
@@ -257,7 +257,7 @@ public class TopTenListsServlet extends HttpServlet {
                 }
 
                 member = new Member(username, password);
-                membersDao.insert(member);
+                membersDAO.insert(member);
 
                 message = "Welcome to TopTopTenLists.com!  You are now a registered member. Please <a href='?cmd=login'>log in</a>.";
                 model.put("message", message);
@@ -288,6 +288,8 @@ public class TopTenListsServlet extends HttpServlet {
         logger.warn("-----------------------------------------");
         logger.warn("  TopTenListsServlet destroy() completed");
         logger.warn("-----------------------------------------");
+        listsDAO.disconnect();
+        membersDAO.disconnect();
     }
 
     @Override
