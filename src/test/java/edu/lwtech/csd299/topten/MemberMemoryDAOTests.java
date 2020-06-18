@@ -9,19 +9,18 @@ public class MemberMemoryDAOTests {
     private DAO<Member> memoryDAO;
 
     private Member fred;
-    private Member tom;
-    private Member mary;
 
     @Before
     public void setUp() {
         fred = new Member("fred@lwtech.edu", "12345678");
-        tom = new Member("tom@lwtech.edu", "12345678");
-        mary = new Member("mary@lwtech.edu", "12345678");
 
         memoryDAO = new MemberMemoryDAO();
-        memoryDAO.insert(fred);
-        memoryDAO.insert(tom);
-        memoryDAO.insert(mary);
+        memoryDAO.init("jdbc","username","password","driver");  // Params ignored for memory DAO
+    }
+
+    @After
+    public void tearDown() {
+        memoryDAO.disconnect();
     }
 
     @Test

@@ -9,8 +9,6 @@ public class TopTenListMemoryDAOTests {
     private DAO<TopTenList> memoryDAO;
 
     private TopTenList romanList;
-    private TopTenList planetsList;
-    private TopTenList starWarsList;
 
     @Before
     public void setUp() {
@@ -33,40 +31,13 @@ public class TopTenListMemoryDAOTests {
         );
         romanList = new TopTenList(description, items, owner);
 
-        description = "Top 10 Favorite Planets";
-        items = Arrays.asList(
-            "Hollywood",
-            "Neptune",
-            "Uranus",
-            "Venus",
-            "Mercury",
-            "Earth",
-            "Mars",
-            "Jupiter",
-            "Saturn",
-            "Pluto!!!"
-        );
-        planetsList = new TopTenList(description, items, owner);
-        
-        description = "Top 10 Favorite Star Wars Movies";
-        items = Arrays.asList(
-            "III: Revenge of the Sith",
-            "II: Attack of the Clones",
-            "VIII: The Last Jedi",
-            "IX: The Rise of Skywalker",
-            "VI: Return of the Jedi",
-            "I: The Phantom Menace",
-            "VII: The Force Awakens",
-            "The Mandelorian Compilation",
-            "IV: A New Hope",
-            "V: The Empire Strikes Back"
-        );
-        starWarsList = new TopTenList(description, items, owner);
-
         memoryDAO = new TopTenListMemoryDAO();
-        memoryDAO.insert(romanList);
-        memoryDAO.insert(planetsList);
-        memoryDAO.insert(starWarsList);
+        memoryDAO.init("jdbc","username","password","driver");  // Params ignored for memory DAO
+    }
+
+    @After
+    public void tearDown() {
+        memoryDAO.disconnect();
     }
 
     @Test
